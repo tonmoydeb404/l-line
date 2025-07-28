@@ -11,10 +11,15 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.11",
+    "@tensorflow-models/blazeface": "^0.1.0",
+    "@tensorflow-models/face-detection": "^1.0.3",
+    "@tensorflow/tfjs": "^4.22.0",
+    "@tensorflow/tfjs-backend-webgl": "^4.22.0",
     "lucide-react": "^0.532.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-dropzone": "^14.3.8",
+    "sonner": "^2.0.6",
     "tailwindcss": "^4.1.11"
   },
   "devDependencies": {
