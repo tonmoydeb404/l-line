@@ -2555,7 +2555,8 @@
     {
         "name": "css3",
         "altnames": [
-            "cascadingstylesheets3"
+            "cascadingstylesheets3",
+            "css"
         ],
         "tags": [
             "language",
@@ -5396,7 +5397,8 @@
     {
         "name": "html5",
         "altnames": [
-            "hypertextmarkdownlanguage5"
+            "hypertextmarkdownlanguage5",
+            "html"
         ],
         "tags": [
             "programming",
