@@ -16,6 +16,7 @@ export interface LanguagePosition {
   fromPoint: { x: number; y: number };
   scaleFactor: number;
   icon?: HTMLImageElement;
+  iconSize: number;
 }
 
 interface UseLineGeneratorProps {
@@ -86,13 +87,18 @@ export const useLineGenerator = ({
     const imageSize = Math.min(canvas.width, canvas.height);
     const scaleFactor = imageSize / 500;
 
+    // Calculate dynamic icon scaling based on languages count and canvas width
+    const spacing = canvas.width / (languages.length + 1);
+    const maxIconSize = Math.min(spacing * 0.8, 80 * scaleFactor); // Max 80% of available space
+    const minIconSize = 30 * scaleFactor; // Minimum readable size
+    const dynamicIconSize = Math.max(minIconSize, maxIconSize);
+
     // Position languages at the very top of the image
     const positions: LanguagePosition[] = [];
 
     for (let index = 0; index < languages.length; index++) {
       const lang = languages[index];
-      const totalWidth = canvas.width;
-      const spacing = totalWidth / (languages.length + 1);
+      // const totalWidth = canvas.width;
 
       const position = {
         x: spacing * (index + 1),
@@ -116,6 +122,7 @@ export const useLineGenerator = ({
         fromPoint: topOfHead,
         scaleFactor,
         icon,
+        iconSize: dynamicIconSize, // Add dynamic icon size
       });
     }
 

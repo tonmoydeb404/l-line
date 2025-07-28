@@ -1,4 +1,5 @@
 import type { Face } from "@tensorflow-models/face-detection";
+import { Download } from "lucide-react";
 import React, { useEffect } from "react";
 import {
   useLineGenerator,
@@ -23,13 +24,34 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
     languages,
   });
 
-  // Draw a single line with icon
+  // Download canvas as image
+  const downloadImage = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    // Create download link
+    const link = document.createElement("a");
+    link.download = `l-line-${Date.now()}.png`;
+    link.href = canvas.toDataURL("image/png");
+
+    // Trigger download
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
   const drawLine = (
     ctx: CanvasRenderingContext2D,
     langPos: LanguagePosition
   ) => {
-    const { fromPoint, position, usagePercent, scaleFactor, icon, language } =
-      langPos;
+    const {
+      fromPoint,
+      position,
+      usagePercent,
+      scaleFactor,
+      icon,
+      language,
+      iconSize,
+    } = langPos;
 
     // Scale line width based on usage percentage
     const baseLineWidth = 3 * scaleFactor;
@@ -56,22 +78,20 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
 
     ctx.restore();
 
-    // Draw language icon or fallback
-    const iconSize = 50 * scaleFactor;
-
+    // Draw language icon or fallback using dynamic iconSize
     if (icon) {
-      // Draw the actual icon
+      // Draw the actual icon with dynamic size
       ctx.drawImage(
         icon,
         position.x - iconSize / 2,
         position.y - iconSize / 2,
-        iconSize,
+        iconSize, // Use dynamic iconSize instead of fixed 50 * scaleFactor
         iconSize
       );
     } else {
-      // Fallback: draw circle with text
-      const circleRadius = 25 * scaleFactor;
-      const primaryFontSize = Math.max(12, 18 * scaleFactor);
+      // Fallback: draw circle with text, scaled proportionally to iconSize
+      const circleRadius = iconSize / 2; // Circle radius based on iconSize
+      const primaryFontSize = Math.max(8, iconSize / 3); // Font size based on iconSize
 
       ctx.save();
       ctx.fillStyle = "#666666";
@@ -133,6 +153,19 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
           style={{ maxHeight: "600px", objectFit: "contain" }}
         />
       </div>
+
+      {/* Download button - only show when we have language positions */}
+      {languagePositions.length > 0 && (
+        <div className="flex justify-center mt-4">
+          <button
+            onClick={downloadImage}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white font-medium text-sm rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md"
+          >
+            <Download size={16} />
+            Download L-Line
+          </button>
+        </div>
+      )}
     </div>
   );
 };
