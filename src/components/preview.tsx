@@ -82,7 +82,7 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
     } = langPos;
 
     // Calculate line width with better scaling
-    const baseLineWidth = 1.5 * scaleFactor;
+    const baseLineWidth = 2 * scaleFactor;
     const maxLineWidth = 6 * scaleFactor;
     const lineWidth = Math.max(
       baseLineWidth,
@@ -98,8 +98,8 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
       position.x,
       position.y
     );
-    gradient.addColorStop(0, "rgba(220, 38, 38, 0.7)"); // Red start
-    gradient.addColorStop(1, "rgba(185, 28, 28, 0.5)"); // Darker Red end
+    gradient.addColorStop(0, "rgba(220, 38, 38, 0.8)"); // Red start
+    gradient.addColorStop(1, "rgba(185, 28, 28, 0.7)"); // Darker Red end
 
     ctx.strokeStyle = gradient;
     ctx.lineWidth = lineWidth;

@@ -25,7 +25,7 @@ const ImageDropzone: React.FC<ImageDropzoneProps> = ({ image, setImage }) => {
       "image/*": [".jpeg", ".jpg", ".webp", ".png"],
     },
     multiple: false,
-    maxSize: 5 * 1024 * 1024, // 5MB limit
+    maxSize: 10 * 1024 * 1024, // 5MB limit
   });
 
   return (
@@ -74,7 +74,7 @@ const ImageDropzone: React.FC<ImageDropzoneProps> = ({ image, setImage }) => {
                 Drag and drop or click to select
               </p>
               <p className="text-xs text-gray-400 mt-2">
-                Supports: JPEG, PNG, WebP (max 5MB)
+                Supports: JPEG, PNG, WebP (max 10MB)
               </p>
             </div>
           </div>
