@@ -1,3 +1,5 @@
+"use client";
+
 import {
   createDetector,
   SupportedModels,
@@ -20,6 +22,7 @@ interface UseDetectFaceReturn {
   status: DetectionStatus;
   face: Face | null;
   isLoading: boolean;
+  resetFace: () => void; // Added resetFace to return type
 }
 
 const useDetectFace = (): UseDetectFaceReturn => {
@@ -114,11 +117,18 @@ const useDetectFace = (): UseDetectFaceReturn => {
     [loadModel]
   );
 
+  // New reset function for face data
+  const resetFace = useCallback(() => {
+    setFace(null);
+    setStatus("idle");
+  }, []);
+
   return {
     detectFace,
     status,
     face,
     isLoading,
+    resetFace, // Return the new reset function
   };
 };
 

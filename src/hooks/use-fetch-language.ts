@@ -1,3 +1,5 @@
+"use client";
+
 import { useCallback, useState } from "react";
 
 interface LanguageData {
@@ -11,6 +13,7 @@ interface UseFetchLanguagesReturn {
   isLoading: boolean;
   error: string | null;
   fetchLanguages: (username: string) => Promise<LanguageData[]>;
+  resetLanguages: () => void; // Added resetLanguages to return type
 }
 
 // Session storage key prefix
@@ -192,10 +195,17 @@ export const useFetchLanguages = (): UseFetchLanguagesReturn => {
     [getFromStorage, fetchFromAPI, saveToStorage]
   );
 
+  // New reset function for languages
+  const resetLanguages = useCallback(() => {
+    setLanguages([]);
+    setError(null);
+  }, []);
+
   return {
     languages,
     isLoading,
     error,
     fetchLanguages,
+    resetLanguages, // Return the new reset function
   };
 };

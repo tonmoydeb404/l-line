@@ -1,6 +1,7 @@
 import type { Face } from "@tensorflow-models/face-detection";
 import { Download } from "lucide-react";
-import React, { useEffect } from "react";
+import type React from "react";
+import { useEffect } from "react";
 import {
   useLineGenerator,
   type LanguageData,
@@ -63,7 +64,7 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
     );
   };
 
-  // Draw a single line with icon
+  // Draw a single line with enhanced styling
   const drawLine = (
     ctx: CanvasRenderingContext2D,
     langPos: LanguagePosition
@@ -78,21 +79,32 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
       iconSize,
     } = langPos;
 
-    // Calculate line width
-    const baseLineWidth = 3 * scaleFactor;
-    const maxLineWidth = 10 * scaleFactor;
+    // Calculate line width with better scaling
+    const baseLineWidth = 1.5 * scaleFactor;
+    const maxLineWidth = 6 * scaleFactor;
     const lineWidth = Math.max(
       baseLineWidth,
       (usagePercent / 100) * maxLineWidth
     );
 
-    // Draw line
+    // Draw line with subtle gradient
     ctx.save();
-    ctx.strokeStyle = "rgba(255, 0, 0, 0.3)";
+
+    const gradient = ctx.createLinearGradient(
+      fromPoint.x,
+      fromPoint.y,
+      position.x,
+      position.y
+    );
+    gradient.addColorStop(0, "rgba(59, 130, 246, 0.7)"); // Blue start
+    gradient.addColorStop(1, "rgba(147, 51, 234, 0.5)"); // Purple end
+
+    ctx.strokeStyle = gradient;
     ctx.lineWidth = lineWidth;
     ctx.lineCap = "round";
-    ctx.shadowColor = "rgba(255, 0, 0, 0.3)";
-    ctx.shadowBlur = 15 * scaleFactor;
+    ctx.shadowColor = "rgba(0, 0, 0, 0.1)"; // Subtle shadow
+    ctx.shadowBlur = 5 * scaleFactor;
+    ctx.shadowOffsetY = 2 * scaleFactor;
 
     ctx.beginPath();
     ctx.moveTo(fromPoint.x, fromPoint.y);
@@ -100,8 +112,23 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
     ctx.stroke();
     ctx.restore();
 
-    // Draw icon or fallback
+    // Draw icon with enhanced styling
     if (icon) {
+      // Draw white background circle
+      ctx.save();
+      ctx.fillStyle = "white";
+      ctx.beginPath();
+      ctx.arc(
+        position.x,
+        position.y,
+        iconSize / 2 + 3 * scaleFactor,
+        0,
+        2 * Math.PI
+      );
+      ctx.fill();
+      ctx.restore();
+
+      // Draw the icon
       ctx.drawImage(
         icon,
         position.x - iconSize / 2,
@@ -110,18 +137,20 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
         iconSize
       );
     } else {
-      // Text fallback
+      // Enhanced text fallback
       const circleRadius = iconSize / 2;
-      const fontSize = Math.max(8, iconSize / 3);
+      const fontSize = Math.max(10, iconSize / 3);
 
       ctx.save();
-      ctx.fillStyle = "#666666";
+      // Draw background circle
+      ctx.fillStyle = "#3B82F6"; // A clean blue
       ctx.beginPath();
       ctx.arc(position.x, position.y, circleRadius, 0, 2 * Math.PI);
       ctx.fill();
 
+      // Draw text
       ctx.fillStyle = "white";
-      ctx.font = `bold ${fontSize}px Arial`;
+      ctx.font = `bold ${fontSize}px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif`;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.fillText(language.toUpperCase().slice(0, 2), position.x, position.y);
@@ -156,12 +185,12 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
   if (!image) return null;
 
   return (
-    <div className="w-full max-w-4xl mx-auto">
+    <div className="w-full">
       <div className="relative">
         <img ref={imageRef} className="hidden" alt="Source" />
         <canvas
           ref={canvasRef}
-          className="w-full h-auto border border-gray-200 rounded-lg shadow-lg"
+          className="w-full h-auto border border-gray-200 rounded-md shadow-sm"
           style={{ maxHeight: "600px", objectFit: "contain" }}
         />
       </div>
@@ -170,7 +199,7 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
         <div className="flex justify-center mt-6">
           <button
             onClick={downloadImage}
-            className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-all duration-200 shadow-sm hover:shadow-md"
           >
             <Download size={18} />
             Download L-Line
