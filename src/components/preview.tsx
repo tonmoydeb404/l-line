@@ -1,3 +1,5 @@
+"use client";
+
 import type { Face } from "@tensorflow-models/face-detection";
 import { Download } from "lucide-react";
 import type React from "react";
@@ -96,8 +98,8 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
       position.x,
       position.y
     );
-    gradient.addColorStop(0, "rgba(59, 130, 246, 0.7)"); // Blue start
-    gradient.addColorStop(1, "rgba(147, 51, 234, 0.5)"); // Purple end
+    gradient.addColorStop(0, "rgba(220, 38, 38, 0.7)"); // Red start
+    gradient.addColorStop(1, "rgba(185, 28, 28, 0.5)"); // Darker Red end
 
     ctx.strokeStyle = gradient;
     ctx.lineWidth = lineWidth;
@@ -143,7 +145,7 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
 
       ctx.save();
       // Draw background circle
-      ctx.fillStyle = "#3B82F6"; // A clean blue
+      ctx.fillStyle = "#3B82F6"; // A clean red
       ctx.beginPath();
       ctx.arc(position.x, position.y, circleRadius, 0, 2 * Math.PI);
       ctx.fill();
